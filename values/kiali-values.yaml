@@ -1,0 +1,9 @@
+auth:
+  strategy: anonymous
+external_services:
+  prometheus:
+    url: http://prometheus-server.monitoring.svc.cluster.local
+deployment:
+  accessible_namespaces: ["**"]   # show all; restrict later if you want
+server:
+  web_fqdn: ""

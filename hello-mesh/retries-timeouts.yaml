@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: hello-vs
+  namespace: hello
+spec:
+  hosts: ["*"]
+  gateways: ["hello-gw"]
+  http:
+  - timeout: 2s
+    retries:
+      attempts: 3
+      perTryTimeout: 500ms
+      retryOn: 5xx,reset,connect-failure,refused-stream
+    route:
+    - destination: { host: hello-world.hello.svc.cluster.local, port: { number: 80 } }

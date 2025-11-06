@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: hello-vs
+  namespace: hello
+spec:
+  hosts: ["*"]
+  gateways: ["hello-gw"]
+  http:
+  - fault:
+      delay:
+        fixedDelay: 2s
+        percentage: { value: 20 }
+    route:
+    - destination: { host: hello-world.hello.svc.cluster.local, port: { number: 80 } }
