@@ -11,7 +11,7 @@ spec:
     targetRevision: 1.22.3
     helm:
       valueFiles:
-        - values/istio-ingress-values.yaml
+        - ../values/istio-ingress-values.yaml
       # tell Argo to load values from this Git repo
       parameters: []
   destination:
