@@ -12,8 +12,64 @@ spec:
     chart: prometheus
     targetRevision: 25.27.0
     helm:
-      valueFiles:
-        - values/prometheus-values.yaml
+      values: |
+        server:
+          # Make the Prometheus UI reachable on KIND (optional)
+          service:
+            type: NodePort
+            nodePort: 32090
+          persistentVolume:
+            enabled: false   # keep it ephemeral for a lab
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits:   { cpu: 500m, memory: 512Mi }
+        
+        # Provide a full Prometheus config that scrapes Istio
+        serverFiles:
+          prometheus.yml: |
+            global:
+              scrape_interval: 15s
+              scrape_timeout: 10s
+              evaluation_interval: 15s
+        
+            scrape_configs:
+            # --- Scrape Envoy sidecars on all mesh pods (port 15090) ---
+            - job_name: 'envoy-stats'
+              kubernetes_sd_configs:
+              - role: pod
+              relabel_configs:
+              # keep only pods that have an istio-proxy container
+              - source_labels: [__meta_kubernetes_pod_container_name]
+                regex: istio-proxy
+                action: keep
+              # use pod IP as target
+              - source_labels: [__meta_kubernetes_pod_ip]
+                target_label: __address__
+                regex: (.*)
+                replacement: $1:15090
+              # envoy metrics endpoint
+              metric_relabel_configs: []
+              scheme: http
+              metrics_path: /stats/prometheus
+              honor_labels: true
+        
+            # --- Scrape istiod metrics (port 15014) ---
+            - job_name: 'istiod'
+              kubernetes_sd_configs:
+              - role: pod
+              relabel_configs:
+              - source_labels: [__meta_kubernetes_namespace]
+                regex: istio-system
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_label_app]
+                regex: istiod
+                action: keep
+              - source_labels: [__meta_kubernetes_pod_ip]
+                target_label: __address__
+                regex: (.*)
+                replacement: $1:15014
+              metrics_path: /metrics
+              scheme: http
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
