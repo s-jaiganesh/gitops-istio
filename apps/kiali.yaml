@@ -21,6 +21,10 @@ spec:
         external_services:
           prometheus:
             url: http://prometheus-server.monitoring.svc.cluster.local
+          grafana:
+            enabled: false   
+          tracing:
+            enabled: true   
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system

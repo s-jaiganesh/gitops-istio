@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jaeger
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"   # before/with Kiali
+spec:
+  project: default
+  source:
+    repoURL: https://jaegertracing.github.io/helm-charts
+    chart: jaeger
+    # You can pin a version you prefer (example): targetRevision: 0.71.16
+    targetRevision: 0.71.16
+    helm:
+      values: |
+        provisionDataStore:
+          cassandra: false
+          elasticsearch: false
+          kafka: false
+        allInOne:
+          enabled: true
+          service:
+            type: NodePort
+            ports:
+              - name: query-http
+                port: 16686
+                nodePort: 31686  # UI at http://127.0.0.1:31686
+        collector:
+          enabled: false
+        agent:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+    createNamespace: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
