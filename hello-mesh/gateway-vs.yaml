@@ -24,5 +24,12 @@ spec:
   http:
   - route:
     - destination:
-        host: hello-world.hello.svc.cluster.local  # adjust if your Service differs
+        host: hello-world.hello.svc.cluster.local
+        subset: v1
         port: { number: 80 }
+      weight: 90
+    - destination:
+        host: hello-world.hello.svc.cluster.local
+        subset: v2
+        port: { number: 80 }
+      weight: 10
