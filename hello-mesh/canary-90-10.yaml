@@ -9,6 +9,6 @@ spec:
   http:
   - route:
     - destination: { host: hello-world.hello.svc.cluster.local, subset: v1, port: { number: 80 } }
-      weight: 90
+      weight: 40 
     - destination: { host: hello-world.hello.svc.cluster.local, subset: v2, port: { number: 80 } }
-      weight: 10
+      weight: 60
