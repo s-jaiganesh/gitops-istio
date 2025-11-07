@@ -27,9 +27,9 @@ spec:
         host: hello-world.hello.svc.cluster.local
         subset: v1
         port: { number: 80 }
-      weight: 40
-    - destination:
-        host: hello-world.hello.svc.cluster.local
-        subset: v2
-        port: { number: 80 }
-      weight: 60
+  - mirror:
+      host: hello-world.hello.svc.cluster.local
+      subset: v2
+      port: { number: 80 }
+    mirrorPercentage:
+      value: 100.0
