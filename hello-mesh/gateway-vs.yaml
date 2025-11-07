@@ -27,7 +27,7 @@ spec:
         host: hello-world.hello.svc.cluster.local
         subset: v1
         port: { number: 80 }
-  - mirror:
+    mirror:
       host: hello-world.hello.svc.cluster.local
       subset: v2
       port: { number: 80 }
