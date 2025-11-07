@@ -1,14 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-stack
+  name: mesh-namespaces
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: default
   source:
     repoURL: https://github.com/s-jaiganesh/gitops-istio
     targetRevision: main
-    path: apps
+    path: namespaces
     directory:
       recurse: true
   destination:
@@ -18,3 +20,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

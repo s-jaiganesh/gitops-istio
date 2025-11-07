@@ -11,6 +11,6 @@ spec:
     retries:
       attempts: 3
       perTryTimeout: 500ms
-      retryOn: 5xx,reset,connect-failure,refused-stream
+      retryOn: 5xx,connect-failure,refused-stream,reset
     route:
     - destination: { host: hello-world.hello.svc.cluster.local, port: { number: 80 } }

@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-mesh
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/s-jaiganesh/gitops-istio
+    targetRevision: main
+    path: hello-mesh
+    directory:
+      recurse: true
+      # Only apply the base routing; keep other VS examples excluded
+      exclude: '{canary-*.yaml,fault-injection.yaml,retries-timeouts.yaml}'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello
+    createNamespace: true
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }

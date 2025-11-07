@@ -22,11 +22,7 @@ spec:
   hosts: ["*"]
   gateways: ["hello-gw"]
   http:
-  - match:
-    - uri:
-        prefix: /
-    route:
+  - route:
     - destination:
-        host: hello-world.hello.svc.cluster.local
-        port:
-          number: 80
+        host: hello-world.hello.svc.cluster.local  # adjust if your Service differs
+        port: { number: 80 }

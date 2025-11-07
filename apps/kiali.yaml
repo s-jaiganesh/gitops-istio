@@ -15,15 +15,15 @@ spec:
       values: |
         auth:
           strategy: anonymous
+        deployment:
+          service_type: NodePort
+          nodeport_port: 32001       # => http://127.0.0.1:32001
         external_services:
           prometheus:
             url: http://prometheus-server.monitoring.svc.cluster.local
-        deployment:
-          accessible_namespaces: ["**"]   # show all; restrict later if you want
-        server:
-          web_fqdn: ""
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
+    createNamespace: true
   syncPolicy:
     automated: { prune: true, selfHeal: true }

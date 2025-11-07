@@ -14,7 +14,7 @@ spec:
     helm:
       values: |
         service:
-          type: NodePort
+          type: NodePort           # KIND-friendly
           ports:
             - name: http2
               port: 80
@@ -29,6 +29,4 @@ spec:
     namespace: istio-system
     createNamespace: true
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    automated: { prune: true, selfHeal: true }
