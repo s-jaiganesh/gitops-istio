@@ -20,7 +20,7 @@ spec:
           nodeport_port: 32001       # => http://127.0.0.1:32001
         external_services:
           prometheus:
-            url: http://prometheus-server.monitoring.svc.cluster.local
+            enabled: false
           grafana:
             enabled: false   
           tracing:
