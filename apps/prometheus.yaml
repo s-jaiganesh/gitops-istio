@@ -31,3 +31,20 @@ spec:
     automated: { prune: true, selfHeal: true }
     syncOptions:
     - CreateNamespace=true
+---
+# prometheus-alias.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: istio-system
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/component: server
+  ports:
+  - name: http
+    port: 9090
+    targetPort: 9090
